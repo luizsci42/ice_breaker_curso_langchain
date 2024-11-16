@@ -1,10 +1,9 @@
 from flask import Flask, render_template, request, jsonify
 from dotenv import load_dotenv
 
+from src.ice_breaker import ice_break_with
+
 load_dotenv()
-
-from ice_breaker import ice_break_with
-
 
 app = Flask(__name__)
 
@@ -17,15 +16,11 @@ def index():
 @app.route("/process", methods=["POST"])
 def process():
     name = request.form["name"]
-    summary_and_facts, interests, ice_breakers, profile_pic_url = ice_break_with(
-        name=name
-    )
+    summary = ice_break_with(name=name)
     return jsonify(
         {
-            "summary_and_facts": summary_and_facts.to_dict(),
-            "interests": interests.to_dict(),
-            "ice_breakers": ice_breakers.to_dict(),
-            "picture_url": profile_pic_url,
+            "summary_and_facts": summary.to_dict(),
+            # "picture_url": profile_pic_url,
         }
     )
 
